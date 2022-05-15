@@ -27,3 +27,52 @@ class Potter:
             print('ERR')
 
         return total_price
+
+    def getDiscount(self, count):
+        return self.DISCOUNT[count]
+
+    def getDiscountedPrice(self, books):
+        totalPrice = 0.0
+        if books is None:
+            books = self.booksadded
+        if (len(books) == len(set(books))):
+            return (len(books) * self.PRICE) - self.getDiscount(len(books))
+        else:
+            arrangedSetList = self.getArrangedSets(books)
+            return self.getDiscountedPriceForList(arrangedSetList)
+
+    def getArrangedSets(self, books):
+        arrangedSetList = []
+        for item in books:
+            if len(arrangedSetList) == 0 :
+                arrangedSetList.append([item])
+            else:
+                self.updatedArrangedList(item, arrangedSetList)
+        return arrangedSetList
+
+    def updatedArrangedList(self, item, arrangedSetList):
+        itemArranged = False
+        discountDict = {}
+        for setitem in arrangedSetList:
+            if not (item in setitem):
+                setitem.append(item)
+                discountDict[self.getDiscountedPriceForList(arrangedSetList)] = setitem
+                setitem.remove(item)
+                itemArranged = True
+        if itemArranged :
+            minval = min(discountDict.keys())
+            setItem = discountDict.get(minval)
+            setItem.append(item)
+
+        if not itemArranged:
+            arrangedSetList.append([item])
+        return  arrangedSetList
+
+    def getDiscountedPriceForList(self,arrangedSetList):
+        totalPrice = 0.0
+        for setItem in arrangedSetList:
+            totalPrice = totalPrice + self.getDiscountedPrice(setItem)
+        if totalPrice <= 0.0:
+            return len(books) * self.PRICE
+        else:
+            return totalPrice
