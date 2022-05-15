@@ -1,4 +1,4 @@
-from potter import Potter
+from .potter import Potter
 
 books = [1,1,2,2,3,3,4,5]
 
