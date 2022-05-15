@@ -1,5 +1,5 @@
 import pytest
-from ..potter import Potter
+from ..potter.potter import Potter
 
 @pytest.fixture()
 def potter():
